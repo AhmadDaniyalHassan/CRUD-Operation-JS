@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Q.3</title>
+</head>
+
+<body>
+
+    <div class="Student-data">
+        <div class="formData">
+
+            <form id="forms" onsubmit="event.preventDefault();" autocomplete="off">
+
+
+                <label>Student Name</label>
+                <input class="Stu-Name" type="text" placeholder="Student Name">
+
+                <label>Student Age</label>
+                <input class="Stu-Age" type="text" placeholder="Student Age">
+
+                <label>Student Class</label>
+                <input class="Stu-Class" type="text" placeholder="Student Class">
+
+
+                <div>
+                    <input class="btn" type="submit" value="Submit">
+                </div>
+            </form>
+            <p id="msg"></p>
+        </div>
+        <br>
+        <hr>
+
+        <div class="display-table">
+            <table class="list" id="employeeList">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student Age</th>
+                        <th>Student Class</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        var selectedRow = null;
+
+        let button = document.querySelector('.btn');
+
+        button.addEventListener('click', studentData);
+
+        function studentData() {
+            let read = readInputData();
+            if (selectedRow == null) {
+                createData(read)
+                removeValue()
+            } else {
+                updateData(read)
+                removeValue()
+                selectedRow = null
+            }
+        }
+
+
+        function readInputData() {
+            let stuData = {};
+            stuData['StudentName'] = document.querySelector('.Stu-Name').value;
+            stuData['StudentAge'] = document.querySelector('.Stu-Age').value;
+            stuData['StudentClass'] = document.querySelector('.Stu-Class').value;
+            return stuData
+
+        }
+
+        function createData(a) {
+            let empTable = document.querySelector('.list');
+            let empRow = empTable.insertRow(empTable.length);
+            let empC1 = empRow.insertCell(0)
+            let empC2 = empRow.insertCell(1)
+            let empC3 = empRow.insertCell(2)
+            let empC4 = empRow.insertCell(3)
+
+            empC1.innerHTML = a.StudentName
+            empC2.innerHTML = a.StudentAge
+            empC3.innerHTML = a.StudentClass
+
+            empC4.innerHTML = `<td><button class="edt" onClick="onEdit(this)">Edit</button> <button class="dlt" onClick="onDelete(this)">Delete</button></td`
+        }
+
+        function removeValue() {
+            let formsRemove = document.getElementById('forms')
+            formsRemove.reset()
+        }
+
+        function onEdit(y) {
+            selectedRow = y.parentElement.parentElement
+            document.querySelector('.Stu-Name').value = selectedRow.cells[0].innerHTML
+            document.querySelector('.Stu-Age').value = selectedRow.cells[1].innerHTML
+            document.querySelector('.Stu-Class').value = selectedRow.cells[2].innerHTML
+        }
+
+        function updateData(stuData) {
+            selectedRow.cells[0].innerHTML = stuData.StudentName
+            selectedRow.cells[1].innerHTML = stuData.StudentAge
+            selectedRow.cells[2].innerHTML = stuData.StudentClass
+
+        }
+        function onDelete() {
+            if (confirm('Are you sure to delete this record?')) {
+                let selectedData = document.querySelector('.dlt')
+                selectedData = selectedData.parentElement.parentElement.remove();
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
